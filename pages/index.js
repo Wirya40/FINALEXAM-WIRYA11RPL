@@ -26,16 +26,18 @@ export default function Home() {
   const [searchText, setSearchText] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
 
+  // 🔍 Detail Product Modal
   const [detailVisible, setDetailVisible] = useState(false);
   const [detailProduct, setDetailProduct] = useState(null);
 
-  // LOAD PRODUCTS
+  // Load products
   const loadProducts = async () => {
     setLoading(true);
     try {
       const res = await fetch("/api/products");
-      const json = await res.json();
+      if (!res.ok) throw new Error("Fetch failed");
 
+      const json = await res.json();
       setProducts(json.data || []);
     } catch (err) {
       console.error(err);
@@ -49,36 +51,36 @@ export default function Home() {
     loadProducts();
   }, []);
 
-  // FILTERING
+  // Filtering
   useEffect(() => {
     let temp = [...products];
 
     if (searchText) {
       temp = temp.filter((p) =>
-        p.name?.toLowerCase().includes(searchText.toLowerCase())
+        (p.name || "").toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
     if (categoryFilter) {
-      temp = temp.filter((p) => p.category === categoryFilter);
+      temp = temp.filter((p) => (p.category || "") === categoryFilter);
     }
 
     setFilteredProducts(temp);
   }, [products, searchText, categoryFilter]);
 
-  // ADD
+  // Add
   const handleAdd = () => {
     setEditingProduct(null);
     setModalVisible(true);
   };
 
-  // EDIT
+  // Edit
   const handleEdit = (record) => {
     setEditingProduct(record);
     setModalVisible(true);
   };
 
-  // DELETE
+  // Delete
   const handleDelete = (id) => {
     Modal.confirm({
       title: "Are you sure you want to delete this product?",
@@ -103,19 +105,21 @@ export default function Home() {
     });
   };
 
-  // ADD / UPDATE SAVE
+  // Save ADD/EDIT
   const handleModalSuccess = async (newOrUpdatedProduct) => {
     try {
       let res;
 
       if (editingProduct) {
+        // PUT
         res = await fetch(`/api/products/${editingProduct.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newOrUpdatedProduct),
         });
       } else {
-        res = await fetch(`/api/products`, {
+        // POST
+        res = await fetch("/api/products", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newOrUpdatedProduct),
@@ -125,7 +129,7 @@ export default function Home() {
       if (!res.ok) throw new Error("Failed to save product");
 
       const savedProduct = await res.json();
-      savedProduct.id = savedProduct.id || Date.now();
+      if (!savedProduct.id) savedProduct.id = Date.now();
 
       if (editingProduct) {
         setProducts((prev) =>
@@ -141,21 +145,19 @@ export default function Home() {
       setEditingProduct(null);
     } catch (err) {
       console.error(err);
-      message.error("Failed to save product");
+      message.error("Failed to save product. Try again.");
     }
   };
 
-  // VIEW DETAIL
+  // 📌 VIEW DETAIL HANDLER
   const handleView = (record) => {
     setDetailProduct(record);
     setDetailVisible(true);
   };
 
-  const categories = Array.from(
-    new Set(products.map((p) => p.category).filter(Boolean))
-  );
+  const categories = Array.from(new Set(products.map((p) => p.category)));
 
-  // TABLE COLUMNS
+  // Table columns
   const columns = [
     {
       title: "Image",
@@ -163,12 +165,7 @@ export default function Home() {
       render: (src) => (
         <img
           src={src || "/placeholder.png"}
-          style={{
-            width: 50,
-            height: 50,
-            objectFit: "cover",
-            borderRadius: 6,
-          }}
+          style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 6 }}
         />
       ),
     },
@@ -177,16 +174,20 @@ export default function Home() {
     {
       title: "Price",
       dataIndex: "price",
-      render: (p) => `Rp ${p?.toLocaleString() ?? "0"}`,
+      render: (p) => `Rp ${p != null ? p.toLocaleString() : "0"}`,
     },
     {
       title: "Stock",
       dataIndex: "stock",
       render: (s) =>
-        s === 0 ? (
-          <span style={{ color: "red" }}>Out of stock</span>
+        s != null ? (
+          s === 0 ? (
+            <span style={{ color: "red" }}>Out of stock</span>
+          ) : (
+            s
+          )
         ) : (
-          s ?? 0
+          0
         ),
     },
     {
@@ -205,7 +206,7 @@ export default function Home() {
 
   return (
     <div className="p-5">
-      
+     
 
       <div className="flex justify-between my-4">
         <h1 className="text-2xl font-bold">Products</h1>
@@ -226,9 +227,8 @@ export default function Home() {
         <Select
           placeholder="Filter by category"
           allowClear
+          onChange={setCategoryFilter}
           style={{ width: 200 }}
-          value={categoryFilter || undefined}  // 🚀 FIX NULL WARNING
-          onChange={(value) => setCategoryFilter(value || "")} // 🚀 FIX
         >
           {categories.map((c) => (
             <Option key={c} value={c}>
@@ -244,23 +244,16 @@ export default function Home() {
         <Skeleton active paragraph={{ rows: 5 }} />
       ) : (
         <Table
-  className="
-    dark:bg-gray-900 dark:text-white
-    dark:[&_th]:bg-gray-800 dark:[&_th]:text-white
-    dark:[&_td]:bg-gray-900 dark:[&_td]:text-gray-200
-    dark:[&_tbody_tr:nth-child(even)_td]:bg-gray-800
-    dark:[&_tbody_tr:nth-child(odd)_td]:bg-gray-900
-  "
-  columns={columns}
-  dataSource={filteredProducts.map((p) => ({
-    ...p,
-    key: p.id,
-  }))}
-  pagination={{ pageSize: 5 }}
-/>
-
+          columns={columns}
+          dataSource={filteredProducts.map((p) => ({
+            ...p,
+            key: p.id,
+          }))}
+          pagination={{ pageSize: 5 }}
+        />
       )}
 
+      {/* ADD / EDIT MODAL */}
       <ProductFormModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
@@ -268,6 +261,7 @@ export default function Home() {
         product={editingProduct}
       />
 
+      {/* VIEW DETAIL MODAL */}
       <Modal
         open={detailVisible}
         title="Product Detail"

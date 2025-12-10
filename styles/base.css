@@ -1,0 +1,143 @@
+/* ============================= */
+/*      GLOBAL BODY & BASE       */
+/* ============================= */
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+  --card-background: #ffffff;
+  --card-border: #d9d9d9;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff; /* default light mode */
+  color: #111827;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Links */
+a {
+  color: #111827;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+/* ============================= */
+/*      GLOBAL APP CONTAINER     */
+/* ============================= */
+#app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background); /* theme aware */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ============================= */
+/*      HEADER / TOPBAR          */
+/* ============================= */
+header {
+  width: 100%;
+  padding: 1rem 2rem;
+  background-color: var(--card-background);
+  color: var(--foreground);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: background-color 0.3s, color 0.3s;
+  z-index: 100;
+}
+
+/* ============================= */
+/*      MAIN CONTENT AREA        */
+/* ============================= */
+main {
+  flex: 1;
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ============================= */
+/*      CARDS / BOXES            */
+/* ============================= */
+.card {
+  background-color: var(--card-background);
+  color: var(--foreground);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+/* Hover effect for card */
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ============================= */
+/*      BUTTONS                  */
+/* ============================= */
+button {
+  font-family: inherit;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--card-border);
+  background-color: var(--card-background);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover {
+  background-color: var(--background);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ============================= */
+/*      TABLES                   */
+/* ============================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--card-border);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+tr:hover {
+  background-color: rgba(0,0,0,0.03);
+}
+
+/* ============================= */
+/*      DARK MODE SUPPORT         */
+/* ============================= */
+html.dark body {
+  background-color: #1a1a1a;
+  color: #e5e7eb;
+}
+
+html.dark header,
+html.dark .card,
+html.dark button {
+  background-color: #1f2937;
+  color: #e5e7eb;
+  border-color: #374151;
+}
+
+html.dark table th,
+html.dark table td {
+  border-color: #374151;
+}

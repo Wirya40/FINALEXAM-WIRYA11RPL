@@ -1,6 +1,14 @@
 /* ============================= */
 /*      GLOBAL LIGHT MODE        */
 /* ============================= */
+
+html:not(.dark) {
+  --background: #ffffff;
+  --foreground: #111827;
+  --card-background: #ffffff;
+  --card-border: #d9d9d9;
+}
+
 html:not(.dark) .ant-layout-header {
   background-color: #fff !important;
   color: #111827 !important;

@@ -1,6 +1,13 @@
 /* ============================= */
 /*      ANT DESIGN DARK MODE     */
 /* ============================= */
+html.dark {
+  --background: #1a1a1a;
+  --foreground: #e5e7eb;
+  --card-background: #1f2937;
+  --card-border: #374151;
+}
+
 html.dark body {
   background-color: #1a1a1a;
   color: #e5e7eb;
