@@ -13,15 +13,14 @@ export default function Dashboard() {
     try {
       const res = await fetch("/api/products");
       if (!res.ok) throw new Error("Fetch failed");
+
       const json = await res.json();
       const data = json.data || [];
       setProducts(data);
 
-      // Count unique categories
       const uniqueCategories = [...new Set(data.map((p) => p.category))];
       setCategories(uniqueCategories);
 
-      // Pick a random product
       if (data.length > 0) {
         const randomIndex = Math.floor(Math.random() * data.length);
         setRandomProduct(data[randomIndex]);
@@ -39,29 +38,40 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-5">
-      {/* Top navigation */}
-      <TopBar />
+    <div className="min-h-screen bg-white dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+      {/* TopBar */}
+     
 
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      {/* Dashboard Content */}
+      <div className="p-5 max-w-6xl mx-auto">
+        <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
 
-      {loading ? (
-        <Skeleton active paragraph={{ rows: 5 }} />
-      ) : (
-        <>
+        {loading ? (
+          <Skeleton active paragraph={{ rows: 5 }} />
+        ) : (
           <Row gutter={[16, 16]}>
+            {/* Total Products */}
             <Col span={8}>
-              <Card title="Total Products" bordered>
+              <Card
+                title="Total Products"
+                bordered
+                className="bg-white dark:bg-gray-800 dark:text-gray-100 transition-colors duration-300"
+              >
                 <h2>{products.length}</h2>
               </Card>
             </Col>
 
+            {/* Categories */}
             <Col span={8}>
-              <Card title="Categories" bordered>
+              <Card
+                title="Categories"
+                bordered
+                className="bg-white dark:bg-gray-800 dark:text-gray-100 transition-colors duration-300"
+              >
                 {categories.length === 0 ? (
                   <p>No categories</p>
                 ) : (
-                  <ul>
+                  <ul className="list-disc pl-5">
                     {categories.map((cat) => (
                       <li key={cat}>{cat}</li>
                     ))}
@@ -70,23 +80,33 @@ export default function Dashboard() {
               </Card>
             </Col>
 
+            {/* Random Product */}
             <Col span={8}>
-              <Card title="Random Product" bordered>
+              <Card
+                title="Random Product"
+                bordered
+                className="bg-white dark:bg-gray-800 dark:text-gray-100 transition-colors duration-300"
+              >
                 {randomProduct ? (
                   <>
                     <img
-                      src={randomProduct.image}
-                      alt={randomProduct.name}
-                      style={{ width: "100%", height: 150, objectFit: "cover" }}
+                      src={randomProduct?.image || "/no-image.png"}
+                      alt={randomProduct?.name || "Product"}
+                      className="w-full h-36 object-cover rounded-md mb-2"
                     />
-                    <h3>{randomProduct.name}</h3>
-                    <p>Price: Rp {randomProduct.price.toLocaleString()}</p>
+                    <h3 className="font-semibold">{randomProduct?.name}</h3>
+                    <p>
+                      Price: Rp{" "}
+                      {randomProduct?.price
+                        ? randomProduct.price.toLocaleString()
+                        : "0"}
+                    </p>
                     <p>
                       Stock:{" "}
-                      {randomProduct.stock === 0 ? (
-                        <span style={{ color: "red" }}>Out of stock</span>
+                      {randomProduct?.stock === 0 ? (
+                        <span className="text-red-500">Out of stock</span>
                       ) : (
-                        randomProduct.stock
+                        randomProduct?.stock ?? "Unknown"
                       )}
                     </p>
                   </>
@@ -96,8 +116,8 @@ export default function Dashboard() {
               </Card>
             </Col>
           </Row>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

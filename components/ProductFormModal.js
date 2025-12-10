@@ -1,22 +1,25 @@
 import { Modal, Form, Input, InputNumber, Button } from "antd";
 import { useEffect } from "react";
 
-export default function ProductFormModal({ visible, onClose, onSuccess, product }) {
+export default function ProductFormModal({
+  visible,
+  onClose,
+  onSuccess,
+  product,
+}) {
   const [form] = Form.useForm();
 
   useEffect(() => {
     if (product) {
-      // prefill form for editing
       form.setFieldsValue({
         name: product.name || "",
         description: product.description || "",
-        price: product.price != null ? product.price : 0,
-        stock: product.stock != null ? product.stock : 0,
+        price: product.price ?? 0,
+        stock: product.stock ?? 0,
         category: product.category || "",
         image: product.image || "",
       });
     } else {
-      // reset form for adding
       form.resetFields();
     }
   }, [product, form]);
@@ -25,12 +28,12 @@ export default function ProductFormModal({ visible, onClose, onSuccess, product 
     try {
       const values = await form.validateFields();
 
-      // If image is empty, assign a default placeholder
       if (!values.image) {
-        values.image = "/placeholder.png"; // put a placeholder image in public folder
+        values.image = "/placeholder.png"; // file harus ada di public/
       }
 
       const result = product ? { ...values, id: product.id } : values;
+
       onSuccess(result);
       form.resetFields();
     } catch (err) {
@@ -52,7 +55,7 @@ export default function ProductFormModal({ visible, onClose, onSuccess, product 
         </Button>,
       ]}
     >
-      <Form form={form} layout="vertical">
+      <Form key={product?.id || "new"} form={form} layout="vertical">
         <Form.Item
           label="Name"
           name="name"

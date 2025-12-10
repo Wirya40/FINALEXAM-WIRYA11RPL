@@ -1,18 +1,14 @@
-import { createContext, useState, useContext } from "react";
+"use client";
+import { createContext, useState } from "react";
 
-const GlobalContext = createContext();
+export const GlobalContext = createContext();
 
 export function GlobalProvider({ children }) {
-  const [theme, setTheme] = useState("light"); // "light" or "dark"
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [theme, setTheme] = useState("light");
 
   return (
-    <GlobalContext.Provider
-      value={{ theme, setTheme, selectedCategory, setSelectedCategory }}
-    >
+    <GlobalContext.Provider value={{ theme, setTheme }}>
       {children}
     </GlobalContext.Provider>
   );
 }
-
-export const useGlobal = () => useContext(GlobalContext);

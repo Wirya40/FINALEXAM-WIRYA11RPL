@@ -1,0 +1,90 @@
+/* ============================= */
+/*      ANT DESIGN DARK MODE     */
+/* ============================= */
+html.dark body {
+  background-color: #1a1a1a;
+  color: #e5e7eb;
+}
+
+html.dark .ant-layout-header {
+  background-color: #1f2937 !important;
+  color: #fff !important;
+}
+
+html.dark .ant-layout-header a {
+  color: #fff !important;
+}
+
+html.dark .ant-card {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+  border-color: #374151 !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+html.dark .ant-card-body {
+  background-color: #1f2937 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark .ant-table {
+  background-color: #111827 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark .ant-table-thead > tr > th {
+  background-color: #1f2937 !important;
+  color: #fff !important;
+}
+
+html.dark .ant-table-tbody > tr > td {
+  background-color: #111827 !important;
+  color: #e5e7eb !important;
+}
+
+html.dark .ant-table-tbody > tr:nth-child(even) > td {
+  background-color: #1f2937 !important;
+}
+
+html.dark .ant-table-tbody > tr:hover > td {
+  background-color: #374151 !important;
+}
+
+/* Pagination */
+html.dark .ant-pagination-item,
+html.dark .ant-pagination-prev,
+html.dark .ant-pagination-next {
+  background: #1f2937 !important;
+  border-color: #374151 !important;
+}
+
+html.dark .ant-pagination-item a {
+  color: white !important;
+}
+
+html.dark .ant-pagination-item-active {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+html.dark .ant-pagination-item-active a {
+  color: white !important;
+}
+
+/* Buttons */
+html.dark .ant-btn {
+  background-color: #1f2937 !important;
+  color: white !important;
+  border-color: #374151 !important;
+}
+
+html.dark .ant-btn-primary {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+  color: white !important;
+}
+
+/* Switch */
+html.dark .ant-switch {
+  background: #555 !important;
+}
